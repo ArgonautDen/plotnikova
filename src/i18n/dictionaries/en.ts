@@ -1,0 +1,267 @@
+import type { Dictionary } from "../get-dictionary";
+
+const en: Dictionary = {
+  meta: {
+    title: "Galina Plotnikova — veterinary internist",
+    description:
+      "Galina Plotnikova is a veterinary internist offering online consultations for cat and dog owners: symptoms and lab results explained, long-term care for chronic patients. In-person appointments at IVC.",
+    experienceTitle: "Experience & education",
+    experienceDescription: "Diplomas, certificates, education and work experience of veterinary internist Galina Plotnikova.",
+    formatsTitle: "Consultation formats",
+    formatsDescription: "Online consultation formats with a veterinary internist: non-urgent, urgent, ongoing care plans. How a consultation works.",
+    reminderTitle: "Questions",
+    reminderDescription: "What to prepare for an online consultation with a veterinary internist, and which symptoms need a clinic right away.",
+    contactsTitle: "Contacts",
+    contactsDescription: "Contact veterinary internist Galina Plotnikova: WhatsApp, phone, email, online consultation booking.",
+  },
+  nav: {
+    about: "About",
+    formats: "Formats",
+    reminder: "Questions",
+    experience: "Experience & education",
+    contacts: "Contacts",
+    menuOpen: "Open menu",
+    menuClose: "Close menu",
+    language: "Site language",
+    home: "Home",
+  },
+  common: {
+    book: "Book an online consultation",
+    bookShort: "Book",
+    inPerson: "In-person appointments are available at IVC",
+    diplomas: "Diplomas and certificates",
+    allExperience: "Full work experience",
+    allDiplomas: "All diplomas and certificates",
+    opensInNewTab: "opens in a new tab",
+  },
+  hero: {
+    eyebrow: "Veterinary internist",
+    name: "Galina Plotnikova",
+    lead: "I help you understand your pet's health wherever you are. I review the symptoms and lab results and put together a clear plan for what to do next.",
+    trust: "10 years in veterinary medicine",
+  },
+  about: {
+    eyebrow: "Veterinary internist",
+    title: "About me",
+    text: "I am a veterinary internist and have been working with animals since 2016. Internal medicine is the foundation of veterinary care. My goal is to understand exactly what is wrong and offer effective treatment. At the first visit I take a careful history, then choose and order the right tests, interpret the results and build an individual treatment plan.",
+    facts: [
+      { icon: "education", title: "Education", text: "Graduated from the Timiryazev Moscow Agricultural Academy.", link: null },
+      {
+        icon: "experience",
+        title: "Experience",
+        text: "Chief veterinarian at Svoy Doktor clinic (Universitet branch), veterinary internist at IVC MVA.",
+        link: "experience",
+      },
+      {
+        icon: "courses",
+        title: "Continuing education",
+        text: "I regularly take courses in small animal internal medicine. All certificates are on the Diplomas page.",
+        link: "diplomas",
+      },
+    ],
+  },
+  help: {
+    eyebrow: "How I can help",
+    title: "What you can come to me with",
+    lead: "An internist handles most questions about an animal's health. These are the most common reasons people reach out to me.",
+    imageAlt: "Ginger cat wearing glasses",
+    items: [
+      { icon: "digestion", title: "Digestive problems", text: "Vomiting, diarrhea, constipation, poor appetite, weight changes." },
+      { icon: "tests", title: "Lab results and imaging", text: "Interpreting blood and urine tests, ultrasound and X-rays, including those done at another clinic." },
+      { icon: "chronic", title: "Chronic conditions", text: "Kidney, heart and endocrine diseases, allergies. Ongoing care and treatment adjustments over time." },
+      { icon: "skin", title: "Skin and coat", text: "Itching, hair loss, redness, rashes." },
+      { icon: "senior", title: "Senior pets", text: "Regular health checks for older cats and dogs, diet selection and monitoring plans." },
+      { icon: "prevention", title: "Prevention", text: "Vaccination and parasite control schedules, preparing for relocation and travel with your pet." },
+    ],
+  },
+  online: {
+    eyebrow: "Online format",
+    title: "When an online consultation really helps",
+    lead: "An online consultation does not replace an in-person exam, but in many situations it is enough. It saves time and spares your pet unnecessary stress.",
+    fitsTitle: "Online works well if",
+    fits: [
+      { icon: "tests", title: "You have lab results", text: "You have test results you would like explained." },
+      { icon: "symptoms", title: "Unclear symptoms", text: "You need to make sense of the symptoms and decide whether a clinic visit is needed, and how urgently." },
+      { icon: "chronic", title: "A chronic condition", text: "Your pet is being treated for a chronic condition and needs its progress monitored." },
+      { icon: "abroad", title: "Another city or country", text: "You live in another city or country and are looking for a Russian-speaking vet." },
+      { icon: "stress", title: "Travel is hard for your pet", text: "Your pet finds the journey and the clinic very stressful." },
+    ],
+    formatsLink: "Consultation formats",
+    clinicTitle: "Better to go to a clinic right away",
+    clinicText:
+      "If your pet needs a physical exam, blood draw, diagnostics (ultrasound, X-ray) or procedures. If needed, I will suggest which tests to do, help you understand the results and choose a specialist.",
+  },
+  formats: {
+    eyebrow: "Formats",
+    title: "Online consultation formats",
+    lead: "Choose the format that fits your situation. Tap a card to see the details.",
+    groups: [
+      {
+        icon: "planned",
+        title: "Non-urgent",
+        summary: "At a time that suits you",
+        options: [
+          { title: "Written", text: "You choose a time that suits you." },
+          { title: "Written + audio", text: "You choose a time that suits you. Includes an audio call." },
+        ],
+      },
+      {
+        icon: "urgent",
+        title: "Urgent",
+        summary: "Within 24 hours",
+        options: [
+          { title: "Written", text: "The consultation takes place within 24 hours." },
+          { title: "Written + audio", text: "The consultation takes place within 24 hours. Includes an audio call." },
+        ],
+      },
+      {
+        icon: "subscription",
+        title: "Care plan",
+        summary: "Ongoing patient care",
+        options: [
+          { title: "3 months", text: "Ongoing care, written + audio." },
+          { title: "6 months", text: "Ongoing care, written + audio." },
+          { title: "12 months", text: "Ongoing care, written + audio." },
+        ],
+      },
+    ],
+  },
+  steps: {
+    eyebrow: "How it works",
+    title: "How a consultation works",
+    items: [
+      { title: "Booking", text: "Choose a convenient time in the booking service. Times are shown in your time zone.", note: null },
+      { title: "Preparation", text: "Prepare lab results, discharge notes, photos and videos in advance and attach them when booking. I will review them before the consultation.", note: null },
+      {
+        title: "Audio call",
+        text: "The call lasts 30–40 minutes. I will ask about your pet's history and answer your questions.",
+        note: "Only in formats with audio",
+      },
+      { title: "Recommendations", text: "After the consultation you receive a written report with a diagnostic plan, recommendations and answers to your questions.", note: null },
+    ],
+  },
+  prepare: {
+    eyebrow: "Preparation",
+    title: "What to prepare for the consultation",
+    lead: "The more information I have in advance, the more precise my recommendations will be.",
+    imageAlt: "Owners playing with their dog",
+    items: [
+      { title: "About your pet", text: ["As detailed as possible: name, breed, age, sex, weight."] },
+      { title: "Parasite control and vaccinations", text: ["When and with what deworming, flea and tick treatment and vaccinations were done."] },
+      { title: "Pet passport", text: ["Send photos of every page of the passport."] },
+      {
+        title: "Spaying and neutering",
+        text: ["Is your pet spayed or neutered?", "If not: when was the last heat, does your pet show masturbation or sexual activity?"],
+      },
+      {
+        title: "Diet",
+        text: [
+          "What your pet eats. List everything they get or might get, even in tiny amounts or once a week. Please do not leave anything out.",
+          "If the food has changed, note how long your pet ate each one and its composition (protein source).",
+        ],
+      },
+      { title: "Thirst", text: ["Has your pet been drinking more?"] },
+      { title: "Urination", text: ["How many times does your pet squat during a walk? Urine color and smell? How many times a day do they use the litter box?"] },
+      { title: "Stool", text: ["Is the stool formed? Is there mucus or blood? How many times a day?"] },
+      { title: "Medications", text: ["Is your pet taking any medication now? If so, what dose and for how many days?"] },
+      { title: "Chronic conditions", text: ["Any chronic conditions? If so, attach supporting documents: ultrasound reports, blood tests."] },
+      {
+        title: "Your pet's story",
+        text: [
+          "How did your dog or cat come to you? From a breeder (did you see the parents?), a shelter or the street? Tell me the story.",
+          "Was your pet ill as a young animal? Any confirmed viral infections? If so, send the test results.",
+        ],
+      },
+      {
+        title: "Other animals",
+        text: ["Are there other animals at home? If so, how are they doing? Do they go outside or have contact with other animals?"],
+      },
+      { title: "Allergies", text: ["Any allergic reactions to food or medication?"] },
+      {
+        title: "Current condition",
+        text: [
+          "Appetite, thirst, activity, urination, bowel movements.",
+          "Main concerns: vomiting, diarrhea, cough, shortness of breath, sneezing and so on.",
+        ],
+      },
+      { title: "Previous tests", text: ["Scans or photos of all tests done and all vet discharge notes."] },
+      { title: "Where your pet lives", text: ["Country and city. This lets me help you find a specialist if an in-person visit is needed."] },
+      {
+        title: "Videos",
+        text: [
+          "Send a video of your pet.",
+          "To check for dehydration, gently lift the skin at the scruff of the neck and film it.",
+          "Film the mouth so the teeth and gums are visible.",
+        ],
+      },
+    ],
+  },
+  urgent: {
+    eyebrow: "Urgent",
+    title: "When not to wait for a consultation",
+    lead: "With these symptoms, go straight to the nearest 24-hour veterinary clinic. An online consultation would waste precious time.",
+    items: [
+      "difficulty breathing, blue or pale gums",
+      "seizures or loss of consciousness",
+      "repeated, exhausting vomiting",
+      "injury, fall from a height, heavy bleeding",
+      "your pet is not urinating",
+      "suspected poisoning",
+      "your pet cannot get up and does not respond to you",
+    ],
+  },
+  inPerson: {
+    eyebrow: "In-person appointments",
+    title: "I see patients in person at IVC Zapad",
+    text: "If your pet needs an exam, tests or diagnostics, book an in-person appointment at the MVA Innovative Veterinary Center.",
+    link: "Book an in-person appointment at IVC",
+    logoAlt: "MVA Innovative Veterinary Center",
+  },
+  cta: {
+    title: "Have a question about your pet's health?",
+    text: "Book an online consultation. We will work it out together and make a plan.",
+  },
+  footer: {
+    role: "Veterinary internist",
+    rights: "All rights reserved.",
+  },
+  experience: {
+    eyebrow: "Qualifications",
+    title: "Experience & education",
+    diplomasTitle: "Diplomas and certificates",
+    diplomasLead: "Tap a document to open it full screen.",
+    educationTitle: "Education",
+    education: [{ period: "2024", title: "Timiryazev Russian State Agrarian University", text: "Specialist degree in Veterinary Medicine (36.05.01), qualified as a Doctor of Veterinary Medicine." }],
+    workTitle: "Work experience",
+    work: [
+      { period: "2026 — present", title: "Chief veterinarian", place: "Svoy Doktor clinic, Universitet branch" },
+      { period: "2024 — present", title: "Veterinary internist", place: "IVC MVA; Svoy Doktor clinic, Universitet branch" },
+      { period: "2024 — present", title: "Internal medicine department manager", place: "IVC MVA" },
+      { period: "2023 — 2024", title: "Procedure room veterinarian", place: "IVC MVA" },
+      { period: "2019 — 2023", title: "Veterinary assistant", place: "Svoy Doktor clinic, Universitet branch" },
+      { period: "2016 — 2019", title: "Veterinary assistant", place: "Bona-Mente clinic" },
+    ],
+  },
+  contacts: {
+    eyebrow: "Get in touch",
+    title: "Contacts",
+    lead: "The fastest way to book an online consultation is the booking service. For anything else, message me on WhatsApp or by email.",
+    imageAlt: "A dog holding a telephone receiver in its mouth",
+    whatsapp: "WhatsApp",
+    whatsappHint: "Send a message",
+    phone: "Phone",
+    email: "Email",
+    inPersonTitle: "In-person appointments",
+    inPersonText: "IVC Zapad, MVA Innovative Veterinary Center",
+  },
+  diplomas: {
+    empty: "Document coming soon",
+    prev: "Previous",
+    next: "Next",
+    close: "Close",
+    carousel: "Diplomas and certificates",
+    viewer: "Document viewer",
+  },
+};
+
+export default en;

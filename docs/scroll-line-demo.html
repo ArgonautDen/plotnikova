@@ -1,0 +1,229 @@
+<title>Plotnikova Scroll Line</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@400;500;600&display=swap">
+<style>
+/* Layout: long dark page with sample sections; a fixed rail on the right draws a gold line as the page scrolls */
+:root {
+  --bg: #22090e;
+  --card: color-mix(in srgb, #fff 4%, #22090e);
+  --fg: #f0e6dc;
+  --muted: #b8a6a0;
+  --gold: #c5a04a;
+  --gold-soft: color-mix(in srgb, #c5a04a 18%, transparent);
+  --f-display: "Cormorant Garamond", "Times New Roman", serif;
+  --f-body: "Montserrat", system-ui, sans-serif;
+  --rail-right: calc(20px + env(safe-area-inset-right, 0px));
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 16px; line-height: 1.65; }
+.wrap {
+  max-width: 760px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(56px, calc(env(safe-area-inset-right, 0px) + 56px));
+}
+@media (min-width: 900px) { .wrap { padding-right: max(16px, env(safe-area-inset-right, 0px)); } }
+
+header.hero { min-height: 72vh; display: flex; align-items: center; padding-block: 64px; }
+.eyebrow { margin: 0 0 10px; font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+h1, h2 { font-family: var(--f-display); font-weight: 500; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(42px, 7vw, 72px); line-height: 1.02; letter-spacing: .04em; text-transform: uppercase; }
+h2 { font-size: clamp(30px, 4vw, 42px); line-height: 1.1; }
+.lead { margin: 18px 0 0; max-width: 56ch; color: var(--muted); }
+.hint { margin-top: 28px; font-size: 13px; color: var(--muted); }
+
+section.block { padding-block: 72px; border-top: 1px solid var(--gold-soft); }
+.block p { margin: 16px 0 0; max-width: 62ch; color: var(--muted); }
+.block ul { margin: 20px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.block li { display: flex; gap: 12px; align-items: baseline; }
+.block li::before { content: ""; width: 6px; height: 6px; flex: none; transform: rotate(45deg) translateY(-2px); border: 1px solid var(--gold); }
+footer { padding-block: 64px 120px; border-top: 1px solid var(--gold-soft); color: var(--muted); font-size: 13px; }
+
+/* ---------- rail ---------- */
+.rail { position: fixed; z-index: 5; top: calc(88px + env(safe-area-inset-top, 0px)); bottom: calc(40px + env(safe-area-inset-bottom, 0px)); right: var(--rail-right); width: 34px; pointer-events: none; --p: 0; }
+.rail-guide, .rail-line { position: absolute; right: 8px; top: 0; bottom: 0; width: 1px; }
+.rail-guide { background: var(--gold-soft); }
+.rail-line { background: linear-gradient(180deg, transparent, var(--gold) 12%); transform-origin: top; transform: scaleY(var(--p)); }
+.lis { fill: none; stroke: var(--gold); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; overflow: visible; }
+#lis path, #lis rect { vector-effect: non-scaling-stroke; stroke-dasharray: var(--dash, 1); stroke-dashoffset: var(--draw, 0); }
+@property --draw { syntax: "<number>"; inherits: true; initial-value: 0; }
+.rail svg { position: absolute; width: 19px; height: 20px; }
+
+/* v1: lily rides the tip of the line */
+.tip { right: 16px; top: calc(var(--p) * 100%); transform: translateY(-50%); }
+/* v2/v3: lilies fixed along the line, draw themselves as the line passes */
+.mark { top: calc(var(--at) * 100%); transform: translateY(-50%); }
+.mark.left { right: 16px; }
+.mark.right { right: -18px; }
+.mark-tick { position: absolute; right: 4px; width: 9px; height: 1px; background: var(--gold); top: calc(var(--at) * 100%); transform: scaleX(calc(1 - var(--draw, 1))); transform-origin: right; }
+/* v4: lily at the end of the path fills in with progress; rosette dot on the tip */
+.finale { right: -7px; bottom: -42px; width: 32px !important; height: 34px !important; overflow: visible; --k: calc(.3 + var(--p) * .7); }
+/* base outline: always drawn, brightens with scroll */
+.finale .base { opacity: var(--k); stroke-width: 1.5; }
+/* mana: short bright sparks run along every stroke of the lily, gathering energy */
+.finale .spark { --dash: .16 .84; stroke: #f3dc9a; stroke-width: 2; opacity: 0; filter: drop-shadow(0 0 2px #e9c979); animation: mana 7.5s cubic-bezier(.45,0,.25,1) infinite; }
+/* charge: the whole contour lights up once the energy has gathered, then fades */
+.finale .charge { stroke: #f0d58e; stroke-width: 2.2; opacity: 0; filter: drop-shadow(0 0 3px rgba(233,201,121,.9)) drop-shadow(0 0 calc(4px + var(--p) * 10px) rgba(197,160,74,.75)); animation: charge 7.5s ease-in-out infinite; }
+@keyframes mana {
+  0% { --draw: 1; opacity: 0; }
+  8% { opacity: calc(var(--k) * .95); }
+  52% { --draw: 0; opacity: calc(var(--k) * .95); }
+  62%, 100% { --draw: 0; opacity: 0; }
+}
+@keyframes charge {
+  0%, 46% { opacity: 0; }
+  60% { opacity: var(--k); }
+  100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .finale .spark, .finale .charge { animation: none; opacity: 0; } }
+.dot { position: absolute; right: 5px; width: 7px; height: 7px; border: 1px solid var(--gold); border-radius: 50%; background: var(--bg); top: calc(var(--p) * 100%); transform: translateY(-50%); }
+
+.rail [data-v] { display: none; }
+.rail[data-v="1"] [data-v~="1"], .rail[data-v="2"] [data-v~="2"], .rail[data-v="3"] [data-v~="3"], .rail[data-v="4"] [data-v~="4"] { display: block; }
+.rail[data-v="4"] .rail-guide { background: repeating-linear-gradient(180deg, var(--gold-soft) 0 2px, transparent 2px 6px); }
+
+/* variant switcher */
+.switch { position: fixed; z-index: 10; left: 50%; transform: translateX(-50%); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; padding: 4px; max-width: calc(100vw - 32px); background: color-mix(in srgb, #000 35%, var(--bg)); border: 1px solid var(--gold-soft); border-radius: 999px; box-shadow: 0 12px 32px -12px rgba(0,0,0,.6); }
+.switch button { font: 600 13px/1 var(--f-body); padding: 10px 14px; border: 0; border-radius: 999px; background: transparent; color: var(--muted); cursor: pointer; }
+.switch button[aria-pressed="true"] { background: var(--gold); color: #1f0a0e; }
+.switch button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.desc { position: fixed; z-index: 10; left: 50%; transform: translateX(-50%); bottom: calc(66px + env(safe-area-inset-bottom, 0px)); width: min(520px, calc(100vw - 32px)); text-align: center; font-size: 13px; color: var(--fg); background: color-mix(in srgb, #000 35%, var(--bg)); border: 1px solid var(--gold-soft); border-radius: 14px; padding: 10px 14px; }
+
+@media (max-width: 640px) {
+  :root { --rail-right: calc(10px + env(safe-area-inset-right, 0px)); }
+  .rail svg { width: 13px; height: 14px; }
+  .desc { bottom: calc(108px + env(safe-area-inset-bottom, 0px)); }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="lis" viewBox="0 0 100 106">
+<path pathLength="1" d="M50 2 C41 18 37 36 50 56 C63 36 59 18 50 2 Z"/>
+<path pathLength="1" d="M45 59 C30 63 15 54 15 39 C15 27 30 23 34 33 C37 40 31 45 27 41"/>
+<path pathLength="1" d="M55 59 C70 63 85 54 85 39 C85 27 70 23 66 33 C63 40 69 45 73 41"/>
+<rect pathLength="1" x="33" y="58" width="34" height="8" rx="4"/>
+<path pathLength="1" d="M50 66 C46 76 46 86 50 96 C54 86 54 76 50 66"/>
+<path pathLength="1" d="M42 66 C36 72 34 80 38 86"/>
+<path pathLength="1" d="M58 66 C64 72 66 80 62 86"/>
+</symbol>
+</defs></svg>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Ветеринарный терапевт · онлайн-консультации</p>
+    <h1>Галина Плотникова</h1>
+    <p class="lead">Помогаю разобраться в здоровье вашей кошки или собаки, где бы вы ни находились. Разберу симптомы и результаты анализов и составлю понятный план действий.</p>
+    <p class="hint">Прокрутите страницу вниз и посмотрите на правый край. Варианты переключаются кнопками внизу экрана.</p>
+  </div>
+</header>
+
+<main>
+  <section class="block"><div class="wrap">
+    <p class="eyebrow">Обо мне</p><h2>Терапевт видит всю картину</h2>
+    <p>Я работаю с кошками и собаками. Терапевт первым видит пациента целиком, связывает симптомы, анализы и историю болезни в одну картину и решает, какие обследования действительно нужны.</p>
+    <p>На консультации я не тороплюсь и объясняю простыми словами, что происходит с животным. Владелец уходит с ясным планом на ближайшие дни.</p>
+  </div></section>
+
+  <section class="block"><div class="wrap">
+    <p class="eyebrow">С чем помогаю</p><h2>С чем можно обратиться</h2>
+    <ul><li>Рвота, диарея, плохой аппетит, изменение веса</li><li>Расшифровка анализов крови и мочи, УЗИ и рентгена</li><li>Хронические болезни почек, сердца, эндокринной системы</li><li>Зуд, выпадение шерсти, высыпания</li><li>Контроль здоровья пожилых животных</li><li>Вакцинация, обработки от паразитов, подготовка к переезду</li></ul>
+  </div></section>
+
+  <section class="block"><div class="wrap">
+    <p class="eyebrow">Онлайн-формат</p><h2>Когда онлайн-консультация помогает</h2>
+    <p>Онлайн-консультация не заменяет очный осмотр, но во многих ситуациях её достаточно: второе мнение, анализы на руках, контроль хронической болезни, переезд в другую страну.</p>
+    <p>Если нужен осмотр руками или процедура, я подскажу, какие обследования сделать, и помогу разобраться в результатах.</p>
+  </div></section>
+
+  <section class="block"><div class="wrap">
+    <p class="eyebrow">Как проходит</p><h2>Четыре шага</h2>
+    <ul><li>Запись в удобное время в вашем часовом поясе</li><li>Анализы, выписки и видео симптомов заранее</li><li>Видеосвязь: история болезни, осмотр в кадре, ответы на вопросы</li><li>Письменные рекомендации и план после консультации</li></ul>
+  </div></section>
+
+  <section class="block"><div class="wrap">
+    <p class="eyebrow">Срочно</p><h2>Когда не стоит ждать консультации</h2>
+    <p>Затруднённое дыхание, судороги, многократная рвота, травма, подозрение на отравление, кот не может помочиться. В этих случаях сразу обращайтесь в ближайшую круглосуточную клинику.</p>
+  </div></section>
+</main>
+
+<footer><div class="wrap">Демо прокрутки · plotnikova · тексты условные</div></footer>
+
+<div class="rail" id="rail" data-v="1" aria-hidden="true">
+  <div class="rail-guide"></div>
+  <div class="rail-line"></div>
+  <svg class="lis tip" data-v="1"><use href="#lis"/></svg>
+  <div id="marks"></div>
+  <span class="dot" data-v="4"></span>
+  <svg class="lis finale" data-v="4" id="finale" viewBox="0 0 100 106"><use class="base" href="#lis" width="100" height="106"/><use class="charge" href="#lis" width="100" height="106"/><use class="spark" href="#lis" width="100" height="106"/></svg>
+</div>
+
+<p class="desc" id="desc"></p>
+<div class="switch" role="group" aria-label="Вариант линии">
+  <button type="button" data-set="1" aria-pressed="true">1 · Лилия на острие</button>
+  <button type="button" data-set="2" aria-pressed="false">2 · Вехи разделов</button>
+  <button type="button" data-set="3" aria-pressed="false">3 · Ветвь</button>
+  <button type="button" data-set="4" aria-pressed="false">4 · Лилия в финале</button>
+</div>
+
+<script>
+  const rail = document.getElementById('rail');
+  const marksBox = document.getElementById('marks');
+  const finale = document.getElementById('finale');
+  const desc = document.getElementById('desc');
+  const texts = {
+    1: 'Линия растёт вниз вместе с прокруткой, а маленькая лилия едет на её конце, сбоку от линии.',
+    2: 'У начала каждого раздела стоит лилия. Когда линия доходит до неё, лилия прорисовывается и остаётся.',
+    3: 'Лилии расставлены по линии через равные промежутки, поочерёдно слева и справа, как ветка.',
+    4: 'По пунктирной направляющей идёт линия с кружком на конце. Внизу уже нарисованная лилия. По контуру бегут искры, собирается энергия, и весь контур вспыхивает мягким свечением. Чем дальше прокрутка, тем ярче.'
+  };
+  let marks = [];
+
+  function buildMarks() {
+    marksBox.innerHTML = '';
+    const v = rail.dataset.v;
+    const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    let points = [];
+    if (v === '2') {
+      points = [...document.querySelectorAll('section.block')].map(s => ({ at: Math.min(.98, Math.max(.02, (s.offsetTop - innerHeight * .5) / max)), side: 'left' }));
+    } else if (v === '3') {
+      for (let i = 1; i <= 7; i++) points.push({ at: i / 8, side: i % 2 ? 'left' : 'right' });
+    }
+    marks = points.map(pt => {
+      const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      el.setAttribute('class', 'lis mark ' + pt.side);
+      el.style.setProperty('--at', pt.at);
+      el.innerHTML = '<use href="#lis"/>';
+      marksBox.appendChild(el);
+      let tick = null;
+      if (v === '2') { tick = document.createElement('span'); tick.className = 'mark-tick'; tick.style.setProperty('--at', pt.at); marksBox.appendChild(tick); }
+      return { el, tick, at: pt.at };
+    });
+    update();
+  }
+
+  function update() {
+    const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    const p = Math.min(1, Math.max(0, scrollY / max));
+    rail.style.setProperty('--p', p.toFixed(4));
+    marks.forEach(m => {
+      const d = 1 - Math.min(1, Math.max(0, (p - m.at) / 0.035));
+      m.el.style.setProperty('--draw', d.toFixed(3));
+      if (m.tick) m.tick.style.setProperty('--draw', d.toFixed(3));
+    });
+  }
+
+  let ticking = false;
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { update(); ticking = false; }); } }, { passive: true });
+  addEventListener('resize', buildMarks);
+
+  function setVariant(v) {
+    rail.dataset.v = v;
+    desc.textContent = texts[v];
+    document.querySelectorAll('.switch button').forEach(b => b.setAttribute('aria-pressed', b.dataset.set === v ? 'true' : 'false'));
+    buildMarks();
+  }
+  document.querySelectorAll('.switch button').forEach(b => b.addEventListener('click', () => setVariant(b.dataset.set)));
+  setVariant('4');
+</script>

@@ -1,0 +1,12 @@
+/node_modules
+/.next/
+/out/
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+.env*.local
+npm-debug.log*
+
+# Hero video masters: only the compressed copies in public/videos/ are published
+/assets/video/*
+!/assets/video/.gitkeep

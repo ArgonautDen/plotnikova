@@ -1,0 +1,255 @@
+<title>Plotnikova Certificate Sliders</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@400;500;600&display=swap">
+<style>
+/* Layout: one section with the approved coverflow carousel; each scan sits in a parchment frame with a gold double border and a lily seal that fades out in the full-screen view */
+:root {
+  --bg: #22090e;
+  --fg: #f0e6dc;
+  --muted: #b8a6a0;
+  --gold: #c5a04a;
+  --gold-hi: #d9b968;
+  --gold-deep: #a8822f;
+  --gold-soft: color-mix(in srgb, #c5a04a 22%, transparent);
+  --parchment: #f8f0dc;
+  --parchment-edge: #e8d6ae;
+  --f-display: "Cormorant Garamond", "Times New Roman", serif;
+  --f-body: "Montserrat", system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 16px; line-height: 1.6; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header.top { padding-block: 56px 8px; }
+.eyebrow { margin: 0 0 8px; font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+h1 { font-family: var(--f-display); font-weight: 500; margin: 0; font-size: clamp(38px, 6vw, 60px); line-height: 1.05; text-wrap: balance; }
+.lead { margin: 12px 0 0; max-width: 66ch; color: var(--muted); }
+section.demo { padding-block: 24px 64px; overflow-x: clip; }
+
+/* ---------- parchment frame around a certificate scan ---------- */
+.frame { container-type: inline-size; position: relative; background: var(--parchment); border-radius: 2px; box-shadow: 0 22px 48px -20px rgba(0,0,0,.8), 0 0 0 1px rgba(0,0,0,.15); overflow: hidden; }
+.frame.p { aspect-ratio: 210 / 297; }
+.frame.l { aspect-ratio: 297 / 210; }
+/* parchment: warm centre, toasted edges, fine paper grain */
+.frame::before { content: ""; position: absolute; inset: 0; background:
+  radial-gradient(ellipse 75% 70% at 50% 45%, transparent 55%, color-mix(in srgb, var(--parchment-edge) 85%, #b48a4a) 100%),
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .32 0 0 0 0 .15 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none; }
+/* gold double border */
+.frame-border { position: absolute; inset: 3cqw; border: .45cqw solid var(--gold); pointer-events: none; }
+.frame-border::after { content: ""; position: absolute; inset: 1cqw; border: .2cqw solid var(--gold); }
+.frame.l .frame-border { inset: 2.2cqw; border-width: .32cqw; }
+.frame.l .frame-border::after { inset: .7cqw; border-width: .15cqw; }
+/* the scan itself, inside the parchment margin */
+.frame img { position: absolute; inset: 6.5cqw; width: calc(100% - 13cqw); height: calc(100% - 13cqw); object-fit: contain; display: block; }
+.frame.l img { inset: 4.6cqw; width: calc(100% - 9.2cqw); height: calc(100% - 9.2cqw); }
+/* lily seal over the scan */
+.frame-lis { position: absolute; left: 50%; top: 50%; width: 24cqw; aspect-ratio: 100 / 106; transform: translate(-50%, -50%); color: var(--gold-deep); filter: drop-shadow(0 0 2.2cqw var(--parchment)) drop-shadow(0 0 .8cqw var(--parchment)); opacity: .92; pointer-events: none; }
+.frame.l .frame-lis { width: 15cqw; }
+.frame-lis svg { width: 100%; height: 100%; overflow: visible; display: block; }
+
+/* ---------- carousel ---------- */
+.flow { position: relative; height: clamp(320px, 54vw, 480px); margin-top: 24px; touch-action: pan-y; cursor: grab; }
+.flow:active { cursor: grabbing; }
+.flow:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 6px; }
+.flow-item { position: absolute; left: 50%; top: 50%; height: 100%; display: flex; align-items: center; transition: transform .6s cubic-bezier(.22,.8,.2,1), opacity .6s, filter .6s; }
+.flow-item .frame.p { height: 100%; }
+.flow-item .frame.l { width: min(430px, 62vw); }
+.flow-item.active .frame { cursor: zoom-in; }
+.caption { margin: 20px auto 0; text-align: center; min-height: 3.2em; max-width: 56ch; }
+.caption strong { display: block; font: 500 22px/1.25 var(--f-display); color: var(--fg); }
+.caption span { font-size: 13px; color: var(--muted); }
+.ctrl { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 8px; }
+.nav { width: 48px; height: 48px; flex: none; display: grid; place-items: center; border-radius: 999px; border: 1px solid var(--gold); background: transparent; color: var(--gold); cursor: pointer; transition: background-color .25s, color .25s; }
+.nav:hover { background: var(--gold); color: #1f0a0e; }
+.nav:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 3px; }
+.nav:disabled { opacity: .35; cursor: default; background: transparent; color: var(--gold); }
+.nav svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.count { font: 500 15px/1 var(--f-body); letter-spacing: .08em; color: var(--muted); font-variant-numeric: tabular-nums; min-width: 64px; text-align: center; }
+.count b { color: var(--fg); font-weight: 600; }
+
+/* ---------- full-screen view ---------- */
+.lb { position: fixed; inset: 0; z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; background: rgba(12, 3, 5, .95); padding: calc(68px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); animation: lbIn .35s ease; }
+.lb[hidden] { display: none; }
+@keyframes lbIn { from { opacity: 0; } to { opacity: 1; } }
+.lb-stage { flex: 1 1 auto; min-height: 0; width: 100%; display: flex; align-items: center; justify-content: center; touch-action: pan-y; }
+.lb-stage .frame.p { height: 100%; max-width: 100%; }
+.lb-stage .frame.l { width: min(100%, 1000px); }
+/* the seal dissolves so the document can be read */
+.lb-stage .frame-lis { animation: sealOut .9s ease .3s forwards; }
+@keyframes sealOut { to { opacity: 0; transform: translate(-50%, -50%) scale(1.15); filter: blur(2px); } }
+.lb-bar { display: flex; align-items: center; gap: 16px; }
+.lb-close { position: absolute; top: calc(14px + env(safe-area-inset-top, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); }
+.lb-cap { text-align: center; font-size: 13px; color: var(--muted); }
+.lb-cap strong { display: block; font: 500 20px/1.25 var(--f-display); color: var(--fg); }
+
+footer { padding-block: 32px 56px; border-top: 1px solid var(--gold-soft); color: var(--muted); font-size: 13px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation-duration: .001ms !important; animation-delay: 0s !important; }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="lis" viewBox="0 0 100 106"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+<path d="M50 2 C41 18 37 36 50 56 C63 36 59 18 50 2 Z"/><path d="M45 59 C30 63 15 54 15 39 C15 27 30 23 34 33 C37 40 31 45 27 41"/><path d="M55 59 C70 63 85 54 85 39 C85 27 70 23 66 33 C63 40 69 45 73 41"/><rect x="33" y="58" width="34" height="8" rx="4"/><path d="M50 66 C46 76 46 86 50 96 C54 86 54 76 50 66"/><path d="M42 66 C36 72 34 80 38 86"/><path d="M58 66 C64 72 66 80 62 86"/></g></symbol>
+<symbol id="i-left" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></symbol>
+<symbol id="i-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+</defs></svg>
+
+<header class="top"><div class="wrap">
+  <p class="eyebrow">Дипломы и сертификаты</p>
+  <h1>Карусель сертификатов</h1>
+  <p class="lead">Утверждённый вариант 1. Каждый скан вставлен в рамку из «пергамента» с двойной золотой каймой, поверх лежит геральдическая лилия. При нажатии документ открывается на весь экран, и лилия плавно растворяется, чтобы документ можно было прочитать. Сканы здесь условные: вместо них будут фотографии настоящих документов.</p>
+</div></header>
+
+<main><section class="demo"><div class="wrap">
+  <div class="flow" id="flow" tabindex="0" aria-roledescription="карусель" aria-label="Сертификаты"></div>
+  <div class="caption" id="flowCap" aria-live="polite"></div>
+  <div class="ctrl">
+    <button class="nav" type="button" id="flowPrev" aria-label="Предыдущий"><svg><use href="#i-left"/></svg></button>
+    <span class="count" id="flowCount"></span>
+    <button class="nav" type="button" id="flowNext" aria-label="Следующий"><svg><use href="#i-right"/></svg></button>
+  </div>
+</div></section></main>
+
+<footer><div class="wrap">Демо карусели · plotnikova · сканы условные</div></footer>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Просмотр сертификата">
+  <button class="nav lb-close" type="button" id="lbClose" aria-label="Закрыть"><svg><use href="#i-x"/></svg></button>
+  <div class="lb-stage" id="lbStage"></div>
+  <div class="lb-cap" id="lbCap"></div>
+  <div class="lb-bar">
+    <button class="nav" type="button" id="lbPrev" aria-label="Предыдущий"><svg><use href="#i-left"/></svg></button>
+    <span class="count" id="lbCount"></span>
+    <button class="nav" type="button" id="lbNext" aria-label="Следующий"><svg><use href="#i-right"/></svg></button>
+  </div>
+</div>
+
+<script>
+  const certs = [
+    ['Терапия мелких домашних животных', 'Повышение квалификации', 2024, 72, 'p', '#2f5d8a'],
+    ['Клиническая лабораторная диагностика', 'Курс', 2024, 36, 'l', '#7a2e3a'],
+    ['Нефрология кошек и собак', 'Семинар', 2023, 16, 'p', '#2e6b4f'],
+    ['Эндокринология мелких животных', 'Повышение квалификации', 2023, 72, 'p', '#2f5d8a'],
+    ['Гастроэнтерология', 'Курс', 2023, 24, 'l', '#5a4a8a'],
+    ['Кардиология для терапевтов', 'Вебинар', 2022, 8, 'p', '#8a5a2e'],
+    ['Дерматология в практике терапевта', 'Курс', 2022, 36, 'p', '#2e6b4f'],
+    ['Гериатрия кошек и собак', 'Семинар', 2022, 12, 'l', '#2f5d8a'],
+    ['Интерпретация УЗИ брюшной полости', 'Практикум', 2021, 24, 'p', '#7a2e3a'],
+    ['Клиническая фармакология', 'Повышение квалификации', 2021, 72, 'p', '#5a4a8a'],
+    ['Неотложная помощь в терапии', 'Курс', 2021, 16, 'l', '#8a5a2e'],
+    ['Инфекционные болезни кошек', 'Вебинар', 2020, 6, 'p', '#2e6b4f'],
+    ['Питание и диетология', 'Курс', 2020, 24, 'p', '#2f5d8a'],
+    ['Коммуникация с владельцами', 'Тренинг', 2020, 8, 'l', '#7a2e3a'],
+    ['Диплом ветеринарного врача', 'Высшее образование', 2019, null, 'p', '#2e4a6b'],
+  ].map(([course, kind, year, hours, o, ink], i) => ({ i, course, kind, year, hours, o, ink }));
+  const N = certs.length;
+  const meta = c => `${c.kind} · ${c.year}${c.hours ? ' · ' + c.hours + ' ч' : ''}`;
+
+  /* stand-in scans: plain documents drawn as SVG, so the frame can be judged on something scan-like */
+  function scan(c) {
+    const p = c.o === 'p', W = p ? 600 : 848, H = p ? 848 : 600, cx = W / 2;
+    const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    const lines = Array.from({ length: p ? 7 : 5 }, (_, k) => {
+      const w = [.72, .64, .7, .5, .66, .58, .44][k] * W, y = (p ? 470 : 330) + k * (p ? 30 : 26);
+      return `<rect x="${cx - w / 2}" y="${y}" width="${w}" height="7" rx="3" fill="#c9c4bb"/>`;
+    }).join('');
+    const sx = p ? 170 : 200, sy = H - (p ? 130 : 105);
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+      <rect width="${W}" height="${H}" fill="#fdfcf8"/>
+      <rect x="18" y="18" width="${W - 36}" height="${H - 36}" fill="none" stroke="${c.ink}" stroke-width="3" opacity=".55"/>
+      <rect x="${cx - 120}" y="${p ? 70 : 50}" width="240" height="10" rx="5" fill="${c.ink}" opacity=".35"/>
+      <text x="${cx}" y="${p ? 190 : 140}" text-anchor="middle" font-family="Georgia, serif" font-size="${p ? 54 : 46}" fill="${c.ink}" letter-spacing="6">${c.kind === 'Высшее образование' ? 'ДИПЛОМ' : 'СЕРТИФИКАТ'}</text>
+      <text x="${cx}" y="${p ? 290 : 210}" text-anchor="middle" font-family="Georgia, serif" font-size="30" fill="#333">Плотникова Галина Романовна</text>
+      <text x="${cx}" y="${p ? 360 : 265}" text-anchor="middle" font-family="Arial, sans-serif" font-size="${p ? 22 : 20}" fill="#555">${esc(c.course)}</text>
+      <text x="${cx}" y="${p ? 400 : 295}" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" fill="#777">${esc(meta(c))}</text>
+      ${lines}
+      <circle cx="${sx}" cy="${sy}" r="${p ? 62 : 52}" fill="none" stroke="${c.ink}" stroke-width="4" opacity=".5"/>
+      <circle cx="${sx}" cy="${sy}" r="${p ? 46 : 38}" fill="none" stroke="${c.ink}" stroke-width="2" opacity=".45"/>
+      <path d="M${W - 250} ${H - 110} c20 -30 35 10 55 -15 s30 20 50 -5 s25 15 45 0" fill="none" stroke="#2a3a6a" stroke-width="3" opacity=".75"/>
+      <rect x="${W - 260}" y="${H - 90}" width="170" height="2" fill="#999"/>
+    </svg>`;
+    return 'data:image/svg+xml,' + encodeURIComponent(svg);
+  }
+  const scans = certs.map(scan);
+
+  const frameHTML = c => `<div class="frame ${c.o}">
+      <img src="${scans[c.i]}" alt="${c.course}, ${meta(c)}" draggable="false">
+      <span class="frame-border" aria-hidden="true"></span>
+      <span class="frame-lis" aria-hidden="true"><svg viewBox="0 0 100 106"><use href="#lis"/></svg></span>
+    </div>`;
+  const capHTML = c => `<strong>${c.course}</strong><span>${meta(c)}</span>`;
+  const countHTML = (i, n) => `<b>${String(i + 1).padStart(2, '0')}</b> / ${String(n).padStart(2, '0')}`;
+
+  function swipe(el, onLeft, onRight, onTap) {
+    let x0 = null, y0 = 0, moved = false;
+    el.addEventListener('pointerdown', e => { x0 = e.clientX; y0 = e.clientY; moved = false; });
+    el.addEventListener('pointermove', e => { if (x0 !== null && Math.abs(e.clientX - x0) > 8) moved = true; });
+    el.addEventListener('pointerup', e => {
+      if (x0 === null) return;
+      const dx = e.clientX - x0, dy = e.clientY - y0; x0 = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) (dx < 0 ? onLeft : onRight)();
+      else if (!moved && onTap) onTap(e);
+    });
+    el.addEventListener('pointercancel', () => { x0 = null; });
+  }
+
+  /* ---------- full-screen view ---------- */
+  const lb = document.getElementById('lb'), lbStage = document.getElementById('lbStage');
+  let lbIndex = 0, lbReturn = null;
+  function lbShow(i) {
+    lbIndex = (i + N) % N;
+    lbStage.innerHTML = frameHTML(certs[lbIndex]);
+    document.getElementById('lbCap').innerHTML = capHTML(certs[lbIndex]);
+    document.getElementById('lbCount').innerHTML = countHTML(lbIndex, N);
+  }
+  function lbOpen(i) { lbReturn = document.activeElement; lbShow(i); lb.hidden = false; document.body.style.overflow = 'hidden'; document.getElementById('lbClose').focus(); }
+  function lbClose() { lb.hidden = true; document.body.style.overflow = ''; flowGo(lbIndex); if (lbReturn) lbReturn.focus(); }
+  document.getElementById('lbPrev').onclick = () => lbShow(lbIndex - 1);
+  document.getElementById('lbNext').onclick = () => lbShow(lbIndex + 1);
+  document.getElementById('lbClose').onclick = lbClose;
+  lb.addEventListener('click', e => { if (e.target === lb || e.target === lbStage) lbClose(); });
+  addEventListener('keydown', e => {
+    if (lb.hidden) return;
+    if (e.key === 'Escape') lbClose();
+    if (e.key === 'ArrowLeft') lbShow(lbIndex - 1);
+    if (e.key === 'ArrowRight') lbShow(lbIndex + 1);
+  });
+  swipe(lbStage, () => lbShow(lbIndex + 1), () => lbShow(lbIndex - 1));
+
+  /* ---------- carousel ---------- */
+  const flow = document.getElementById('flow');
+  flow.innerHTML = certs.map(c => `<div class="flow-item" data-i="${c.i}">${frameHTML(c)}</div>`).join('');
+  const flowItems = [...flow.children];
+  let fi = 2;
+  function flowRender() {
+    const step = Math.min(flow.clientWidth * 0.26, 260);
+    flowItems.forEach((el, i) => {
+      const o = i - fi, a = Math.abs(o), hidden = a > 3;
+      el.style.transform = `translate(calc(-50% + ${o * step}px), -50%) scale(${1 - Math.min(a, 3) * .16})`;
+      el.style.opacity = hidden ? 0 : (a === 0 ? 1 : .55 - (a - 1) * .15);
+      el.style.filter = a === 0 ? 'none' : 'brightness(.7) saturate(.8)';
+      el.style.zIndex = 20 - a;
+      el.style.pointerEvents = hidden ? 'none' : 'auto';
+      el.classList.toggle('active', a === 0);
+      el.setAttribute('aria-hidden', a === 0 ? 'false' : 'true');
+    });
+    document.getElementById('flowCap').innerHTML = capHTML(certs[fi]);
+    document.getElementById('flowCount').innerHTML = countHTML(fi, N);
+    document.getElementById('flowPrev').disabled = fi === 0;
+    document.getElementById('flowNext').disabled = fi === N - 1;
+  }
+  function flowGo(i) { fi = Math.max(0, Math.min(N - 1, i)); flowRender(); }
+  document.getElementById('flowPrev').onclick = () => flowGo(fi - 1);
+  document.getElementById('flowNext').onclick = () => flowGo(fi + 1);
+  flow.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') flowGo(fi - 1); if (e.key === 'ArrowRight') flowGo(fi + 1); if (e.key === 'Enter') lbOpen(fi); });
+  swipe(flow, () => flowGo(fi + 1), () => flowGo(fi - 1), e => {
+    const item = e.target.closest('.flow-item'); if (!item) return;
+    const i = +item.dataset.i; i === fi ? lbOpen(i) : flowGo(i);
+  });
+  addEventListener('resize', flowRender);
+  flowRender();
+</script>
