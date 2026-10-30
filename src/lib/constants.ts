@@ -31,3 +31,31 @@ export const CONTACTS = {
   whatsappHref: "https://wa.me/79800905400",
   email: "Plotnikovagalinaromanovna@gmail.com",
 } as const;
+
+// Background clips for the video panels (help, prepare, contacts, closing call to action).
+export const PANEL_VIDEOS = {
+  help: {
+    webm: "/videos/help-cat.webm",
+    mp4: "/videos/help-cat.mp4",
+    first: "/images/hero/help-cat-first.jpg",
+    last: "/images/hero/help-cat-last.jpg",
+  },
+  prepare: {
+    webm: "/videos/prepare-people.webm",
+    mp4: "/videos/prepare-people.mp4",
+    first: "/images/hero/prepare-people-first.jpg",
+    last: "/images/hero/prepare-people-last.jpg",
+  },
+  contacts: {
+    webm: "/videos/contacts-dog.webm",
+    mp4: "/videos/contacts-dog.mp4",
+    first: "/images/hero/contacts-dog-first.jpg",
+    last: "/images/hero/contacts-dog-last.jpg",
+  },
+  cta: {
+    webm: "/videos/cta-cat.webm",
+    mp4: "/videos/cta-cat.mp4",
+    first: "/images/hero/cta-cat-first.jpg",
+    last: "/images/hero/cta-cat-last.jpg",
+  },
+} as const;

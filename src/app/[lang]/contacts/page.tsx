@@ -3,9 +3,10 @@ import { notFound } from "next/navigation";
 import { ArrowRight, ExternalLink, Mail, MapPin, MessageCircle, Phone, type LucideIcon } from "lucide-react";
 import { hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
-import { BOOKING_URL, CONTACTS, IVC_URL } from "@/lib/constants";
+import { BOOKING_URL, CONTACTS, IVC_URL, PANEL_VIDEOS } from "@/lib/constants";
 import { Section } from "@/components/ui/Section";
-import { PhotoHeading } from "@/components/ui/PhotoHeading";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { VideoPanel } from "@/components/ui/VideoPanel";
 import { Button } from "@/components/ui/Button";
 import { OrnateCard } from "@/components/decor/OrnateCard";
 import { ICON_STROKE } from "@/components/ui/icons";
@@ -40,20 +41,17 @@ export default async function ContactsPage({ params }: PageProps<"/[lang]/contac
 
   return (
     <Section first>
-      <PhotoHeading
-        as="h1"
-        eyebrow={c.eyebrow}
-        title={c.title}
-        lead={c.lead}
-        action={
-          <Button href={BOOKING_URL} size="lg" icon={<ArrowRight strokeWidth={ICON_STROKE} className="size-5" aria-hidden="true" />}>
-            {dict.common.book}
-          </Button>
-        }
-        photo={{ name: "dog-phone", alt: c.imageAlt, width: 1000, height: 526 }}
-        background="#f5f6f8"
-        pullUp="mt-4"
-      />
+      {/* dog with a telephone receiver, under a dark filter; heading and booking button centred over it */}
+      <VideoPanel video={PANEL_VIDEOS.contacts} overlayClassName="bg-[radial-gradient(ellipse_70%_75%_at_50%_45%,rgba(17,5,8,0.72),rgba(17,5,8,0.5))]">
+        <div className="flex flex-col items-center gap-6 px-6 py-16 sm:px-12 sm:py-20">
+          <SectionHeading as="h1" eyebrow={c.eyebrow} title={c.title} lead={c.lead} />
+          <div className="draw-fade">
+            <Button href={BOOKING_URL} size="lg" icon={<ArrowRight strokeWidth={ICON_STROKE} className="size-5" aria-hidden="true" />}>
+              {dict.common.book}
+            </Button>
+          </div>
+        </div>
+      </VideoPanel>
 
       <ul className="flex flex-wrap gap-5">
         {cards.map(({ icon: Icon, label, value, href, external }) => (

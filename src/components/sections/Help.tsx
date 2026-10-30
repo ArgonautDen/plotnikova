@@ -1,6 +1,8 @@
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { Section } from "@/components/ui/Section";
-import { PhotoHeading } from "@/components/ui/PhotoHeading";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { VideoPanel } from "@/components/ui/VideoPanel";
+import { PANEL_VIDEOS } from "@/lib/constants";
 import { Tiles } from "@/components/ui/Tiles";
 import { DrawOn } from "@/components/decor/DrawOn";
 import { ICONS, ICON_STROKE } from "@/components/ui/icons";
@@ -17,14 +19,10 @@ export function Help({ dict }: { dict: Dictionary }) {
 
   return (
     <Section id="help">
-      <PhotoHeading
-        eyebrow={dict.help.eyebrow}
-        title={dict.help.title}
-        lead={dict.help.lead}
-        photo={{ name: "cat-glasses", alt: dict.help.imageAlt, width: 1000, height: 430 }}
-        background="#f6f6f6"
-        pullUp="mt-0 sm:-mt-4"
-      />
+      {/* cat-in-glasses clip under a dark filter; the heading sits over the cat (it walks in and sits centre frame) */}
+      <VideoPanel video={PANEL_VIDEOS.help} overlayClassName="bg-[radial-gradient(ellipse_70%_75%_at_50%_45%,rgba(17,5,8,0.72),rgba(17,5,8,0.5))]">
+        <SectionHeading eyebrow={dict.help.eyebrow} title={dict.help.title} lead={dict.help.lead} className="px-6 py-16 sm:px-12 sm:py-24" />
+      </VideoPanel>
       <DrawOn>
         <Tiles items={items} decor="lily" />
       </DrawOn>

@@ -64,7 +64,6 @@ const en: Dictionary = {
     eyebrow: "How I can help",
     title: "What you can come to me with",
     lead: "An internist handles most questions about an animal's health. These are the most common reasons people reach out to me.",
-    imageAlt: "Ginger cat wearing glasses",
     items: [
       { icon: "digestion", title: "Digestive problems", text: "Vomiting, diarrhea, constipation, poor appetite, weight changes." },
       { icon: "tests", title: "Lab results and imaging", text: "Interpreting blood and urine tests, ultrasound and X-rays, including those done at another clinic." },
@@ -144,7 +143,6 @@ const en: Dictionary = {
     eyebrow: "Preparation",
     title: "What to prepare for the consultation",
     lead: "The more information I have in advance, the more precise my recommendations will be.",
-    imageAlt: "Owners playing with their dog",
     items: [
       { title: "About your pet", text: ["As detailed as possible: name, breed, age, sex, weight."] },
       { title: "Parasite control and vaccinations", text: ["When and with what deworming, flea and tick treatment and vaccinations were done."] },
@@ -246,7 +244,6 @@ const en: Dictionary = {
     eyebrow: "Get in touch",
     title: "Contacts",
     lead: "The fastest way to book an online consultation is the booking service. For anything else, message me on WhatsApp or by email.",
-    imageAlt: "A dog holding a telephone receiver in its mouth",
     whatsapp: "WhatsApp",
     whatsappHint: "Send a message",
     phone: "Phone",
